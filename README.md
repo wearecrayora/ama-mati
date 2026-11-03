@@ -24,7 +24,8 @@ npm run build    # production build (all pages prerender statically)
 
 ## Link previews (Open Graph)
 
-- Site-wide card: `src/app/opengraph-image.tsx`; one card per product: `src/app/shop/[slug]/opengraph-image.tsx`. Rendered with `next/og` and re-encoded to JPEG (~100 KB) so WhatsApp shows them.
+- Site-wide image: the Amahata favicon mark on cream, `src/app/opengraph-image.png` (static, 1200×630).
+- One card per product: `src/app/shop/[slug]/opengraph-image.tsx`, rendered with `next/og` and re-encoded to JPEG (~100 KB) so WhatsApp shows them.
 - Fonts and images for the cards live in `assets/` (Satori needs TTF + PNG/JPEG).
 - Per-page titles/descriptions go through `pageMeta()` in `src/lib/seo.ts`.
 - Set `NEXT_PUBLIC_SITE_URL=https://aamahata.com` in production. Without it, Vercel deployment URLs (or localhost) are used.

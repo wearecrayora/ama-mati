@@ -22,10 +22,11 @@ function siteUrl() {
   return `http://localhost:${env.PORT ?? 3000}`;
 }
 
-// The site-wide card from app/opengraph-image.tsx. Pages that set their own openGraph
-// object lose the inherited one, and an explicit image also beats a route's own
-// opengraph-image file, so pages with their own card (products) pass it as `image`.
-const DEFAULT_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: "Aamahata — Mati Odisha rice, dali and homemade badi from Odisha" };
+// The site-wide share image: the Amahata favicon mark on cream (app/opengraph-image.png).
+// Pages that set their own openGraph object lose the inherited one, and an explicit
+// image also beats a route's own opengraph-image file, so pages with their own card
+// (products) pass it as `image`.
+const DEFAULT_IMAGE = { url: "/opengraph-image.png", width: 1200, height: 630, alt: "Aamahata logo — Odisha's own online market" };
 
 /*
   Per-page title/description for <head>, Open Graph and Twitter cards.
