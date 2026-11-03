@@ -13,8 +13,15 @@ if (typeof window !== "undefined") {
 
 export { gsap, ScrollTrigger, SplitText, Flip, useGSAP };
 
+/*
+  True while `npx boneyard-js build` is capturing skeletons. The capture skips
+  anything hidden or at opacity 0, so entrance animations must stand down.
+*/
+export const isSkeletonCapture = () =>
+  typeof window !== "undefined" && !!(window as unknown as { __BONEYARD_BUILD?: boolean }).__BONEYARD_BUILD;
+
 export const reduceMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  typeof window !== "undefined" && (isSkeletonCapture() || window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
 export const isFinePointer = () =>
   typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;

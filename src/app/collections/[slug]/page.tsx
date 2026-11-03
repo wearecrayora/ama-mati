@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { byCategory, categories, getCategory, type CategorySlug } from "@/lib/products";
@@ -15,7 +16,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/collections/[slug]">): Promise<Metadata> {
   const c = getCategory((await params).slug);
-  return c ? { title: c.name, description: c.blurb } : {};
+  return c ? pageMeta({ title: c.name, description: c.blurb, path: `/collections/${c.slug}` }) : {};
 }
 
 export default async function CollectionPage({ params }: PageProps<"/collections/[slug]">) {

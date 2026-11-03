@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { gsap, Flip, useGSAP } from "@/lib/gsap";
+import { gsap, Flip, useGSAP, reduceMotion } from "@/lib/gsap";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { categories, type CategorySlug, type Product } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 import Ingredient from "@/components/art/Ingredient";
@@ -15,7 +16,16 @@ const SORTS: { v: Sort; label: string }[] = [
   { v: "rating", label: "Top rated" },
 ];
 
-export default function ShopGrid({ items, showFilters = true }: { items: Product[]; showFilters?: boolean }) {
+export default function ShopGrid({
+  items,
+  showFilters = true,
+  skeletonName,
+}: {
+  items: Product[];
+  showFilters?: boolean;
+  /** Capture this grid as a named skeleton (only the full /shop grid is). */
+  skeletonName?: string;
+}) {
   const root = useRef<HTMLDivElement>(null);
   const flipState = useRef<Flip.FlipState>(null);
   const [cat, setCat] = useState<CategorySlug | "all">("all");
@@ -39,6 +49,7 @@ export default function ShopGrid({ items, showFilters = true }: { items: Product
   useGSAP(
     () => {
       if (!flipState.current) {
+        if (reduceMotion()) return;
         gsap.from("[data-flip]", {
           y: 100,
           rotation: (i) => (i % 2 ? 3 : -3),
@@ -111,13 +122,15 @@ export default function ShopGrid({ items, showFilters = true }: { items: Product
         </div>
       )}
 
-      <div ref={root} className="grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4">
-        {visible.map((p) => (
-          <div key={p.slug} data-flip data-flip-id={p.slug}>
-            <ProductCard product={p} />
-          </div>
-        ))}
-      </div>
+      <Skeleton name={skeletonName} loading={false}>
+        <div ref={root} className="grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4">
+          {visible.map((p) => (
+            <div key={p.slug} data-flip data-flip-id={p.slug}>
+              <ProductCard product={p} />
+            </div>
+          ))}
+        </div>
+      </Skeleton>
       {visible.length === 0 && (
         <div className="py-24 text-center">
           <p className="display text-4xl">Nothing limited in this aisle.</p>

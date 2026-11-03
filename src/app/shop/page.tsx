@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import PageHero from "@/components/ui/PageHero";
 import ShopGrid from "@/components/shop/ShopGrid";
 import { products } from "@/lib/products";
 
-export const metadata: Metadata = { title: "Shop the pantry" };
+export const metadata: Metadata = pageMeta({
+  title: "Shop the pantry",
+  description: "Usuna rice, biryani rice, kolatha and harada dali, homemade biri badi and festival boxes from Mati Odisha. Free delivery over ₹799.",
+  path: "/shop",
+});
 
 export default function ShopPage() {
   return (
@@ -16,7 +21,8 @@ export default function ShopPage() {
         ingredients={["paddy", "sparkle", "badi"]}
       />
       <section className="wrap pb-28 pt-0">
-        <ShopGrid items={products} />
+        {/* Captured as the "shop-grid" skeleton shown by the shop/collection loading.tsx */}
+        <ShopGrid items={products} skeletonName="shop-grid" />
       </section>
     </>
   );

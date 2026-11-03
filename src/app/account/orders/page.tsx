@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getProduct, inr } from "@/lib/products";
 import ProductMedia from "@/components/product/ProductMedia";
 
-export const metadata: Metadata = { title: "My account" };
+export const metadata: Metadata = { title: "My account", robots: { index: false } };
 
 // Sample account data for the approval build.
 const ORDERS = [

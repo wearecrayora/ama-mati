@@ -1,13 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useCart } from "@/lib/store";
-import { getProduct } from "@/lib/products";
+import { useCart, useCartHydrated } from "@/lib/store";
+import { getProduct, products, type Product } from "@/lib/products";
 import ProductCard from "@/components/product/ProductCard";
 import Ingredient from "@/components/art/Ingredient";
+import { Skeleton, useSkeletonCapture } from "@/components/ui/Skeleton";
+
+function Grid({ items }: { items: Product[] }) {
+  return (
+    <div className="mt-12 grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4">
+      {items.map((p) => (
+        <ProductCard key={p.slug} product={p} />
+      ))}
+    </div>
+  );
+}
 
 export default function WishlistPage() {
   const wishlist = useCart((s) => s.wishlist);
+  const hydrated = useCartHydrated();
+  const capture = useSkeletonCapture();
   const items = wishlist.map(getProduct).filter((p) => !!p);
 
   return (
@@ -16,7 +29,12 @@ export default function WishlistPage() {
       <h1 data-split className="display text-[16vw] md:text-[7vw]">
         Wishlist
       </h1>
-      {items.length === 0 ? (
+      {!hydrated || capture ? (
+        // Saved items come from localStorage after hydration; the fixture is what `npm run bones` captures.
+        <Skeleton name="wishlist-grid" loading fixture={<Grid items={products.slice(0, 4)} />}>
+          {null}
+        </Skeleton>
+      ) : items.length === 0 ? (
         <div className="py-20 text-center">
           <Ingredient kind="sparkle" className="mx-auto w-20" />
           <p className="display mt-6 text-4xl">Nothing saved yet.</p>
@@ -24,11 +42,7 @@ export default function WishlistPage() {
           <Link href="/shop" className="btn mt-8">Find something</Link>
         </div>
       ) : (
-        <div className="mt-12 grid grid-cols-2 gap-x-3 gap-y-10 md:grid-cols-3 md:gap-x-6 lg:grid-cols-4">
-          {items.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
+        <Grid items={items} />
       )}
     </div>
   );

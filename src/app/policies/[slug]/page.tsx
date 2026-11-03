@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -48,8 +49,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps<"/policies/[slug]">): Promise<Metadata> {
-  const p = POLICIES[(await params).slug];
-  return p ? { title: p.title } : {};
+  const { slug } = await params;
+  const p = POLICIES[slug];
+  return p ? pageMeta({ title: p.title, description: p.body[0].p, path: `/policies/${slug}` }) : {};
 }
 
 export default async function PolicyPage({ params }: PageProps<"/policies/[slug]">) {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { gsap, useGSAP, isFinePointer } from "@/lib/gsap";
+import { gsap, useGSAP, isFinePointer, reduceMotion } from "@/lib/gsap";
 import { getCategory, getProduct, inr, photosOf, type Product } from "@/lib/products";
 import { useCart, useUI } from "@/lib/store";
 import Ingredient from "@/components/art/Ingredient";
@@ -35,6 +35,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   useGSAP(
     () => {
+      if (reduceMotion()) return;
       const q = gsap.utils.selector(root);
       gsap.from(q("[data-pd-frame]"), { scale: 0.7, rotation: -8, y: 80, duration: 1.3, ease: "back.out(1.5)", delay: 0.35 });
       gsap.from(q("[data-sticker]"), { scale: 0, rotation: -90, duration: 0.9, ease: "back.out(2.4)", stagger: 0.1, delay: 0.8 });
@@ -99,6 +100,8 @@ export default function ProductDetail({ product }: { product: Product }) {
         <div data-stage className="relative rounded-[36px] border-2 border-ink p-4 md:p-6" style={{ background: product.stage, perspective: 1000 }}>
           <div data-pd-frame className="relative">
             <div className="relative aspect-square overflow-hidden rounded-[24px] border-2 border-ink bg-ink">
+              {/* Bone stand-in: boneyard draws square images as circles, so the capture skips <img> and uses this */}
+              <span aria-hidden className="absolute inset-0 rounded-[inherit]" />
               {photos.map((src, i) => (
                 <div key={src} data-shot={i} className={`absolute inset-0 ${i === shot ? "visible z-10" : "invisible z-0"}`}>
                   <Image src={src} alt={`${product.name} — photo ${i + 1}`} fill priority={i === 0} sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
@@ -190,6 +193,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 <li key={p.slug}>
                   <Link href={`/shop/${p.slug}`} className="group block text-center">
                     <span className="relative block aspect-square overflow-hidden rounded-xl border-2 border-ink">
+                      <span aria-hidden className="absolute inset-0 rounded-[inherit]" />
                       <Image src={p.images[0]} alt="" fill sizes="120px" className="object-cover transition-transform duration-500 group-hover:scale-110" />
                     </span>
                     <span className="mt-1.5 block text-xs font-bold leading-tight">{p.name}</span>

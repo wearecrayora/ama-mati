@@ -1,4 +1,5 @@
 import Ingredient from "@/components/art/Ingredient";
+import { Skeleton } from "@/components/ui/Skeleton";
 import type { IngredientKind } from "@/lib/products";
 
 /* Shared top-of-page banner for inner pages. */
@@ -42,7 +43,8 @@ export default function PageHero({
           </div>
         ))}
       </div>
-      <div className="wrap relative">
+      {/* Captured as the "page-hero" skeleton used by route loading.tsx files */}
+      <Skeleton name="page-hero" loading={false} className="wrap relative">
         <p className="eyebrow mb-4 opacity-80">{kicker}</p>
         <h1 data-split className="display max-w-[14ch] text-[15vw] md:text-[8vw]">
           {title}
@@ -53,7 +55,7 @@ export default function PageHero({
           </p>
         )}
         {children}
-      </div>
+      </Skeleton>
     </section>
   );
 }

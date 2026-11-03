@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import { products } from "@/lib/products";
 import ShopGrid from "@/components/shop/ShopGrid";
 import Marquee from "@/components/ui/Marquee";
 import Ingredient from "@/components/art/Ingredient";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMeta({
   title: "Mati Odisha",
   description: "From Odisha to the World — desi usuna rice, dali and homemade badi by Mati Odisha.",
-};
+  path: "/brands/mati-odisha",
+});
 
 const STEPS = [
   { n: "01", t: "Sourced direct", d: "Usuna rice and kolatha dali come straight from farmers in Jajpur — no middlemen, no mystery.", k: "paddy" as const },

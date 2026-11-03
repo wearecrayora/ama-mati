@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getProduct } from "./products";
@@ -50,6 +51,18 @@ export const useCart = create<CartState>()(
     { name: "amahata-cart", skipHydration: true },
   ),
 );
+
+/*
+  False until the bag/wishlist has been read back from localStorage. Pages that
+  depend on it show a skeleton until then, instead of flashing "empty".
+*/
+export function useCartHydrated() {
+  return useSyncExternalStore(
+    (onChange) => useCart.persist.onFinishHydration(onChange),
+    () => useCart.persist.hasHydrated(),
+    () => false,
+  );
+}
 
 export function lineDetail(l: CartLine) {
   const product = getProduct(l.slug);

@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import { notFound } from "next/navigation";
-import { getProduct, products, related } from "@/lib/products";
+import { getProduct, inr, products, related } from "@/lib/products";
 import ProductDetail from "@/components/product/ProductDetail";
 import ProductCard from "@/components/product/ProductCard";
 import Reviews from "@/components/product/Reviews";
 import Marquee from "@/components/ui/Marquee";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 // Every slug is prerendered by generateStaticParams, so navigations here are already
 // instant; opt out of the dev-time Suspense validation for the params read.
@@ -17,7 +19,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/shop/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const p = getProduct(slug);
-  return p ? { title: p.name, description: p.tagline } : {};
+  if (!p) return {};
+  const from = p.sizes[0];
+  return pageMeta({
+    title: p.name,
+    description: `${p.tagline} ${inr(from.price)} for ${from.label}. ${p.description.split(". ")[0]}.`,
+    path: `/shop/${p.slug}`,
+    image: { url: `/shop/${p.slug}/opengraph-image`, alt: `${p.name} by Mati Odisha — ${inr(from.price)} for ${from.label} on Aamahata` },
+  });
 }
 
 export default async function ProductPage({ params }: PageProps<"/shop/[slug]">) {
@@ -27,7 +36,10 @@ export default async function ProductPage({ params }: PageProps<"/shop/[slug]">)
 
   return (
     <>
-      <ProductDetail product={product} />
+      {/* Captured as the "product-page" skeleton shown by loading.tsx */}
+      <Skeleton name="product-page" loading={false} snapshotConfig={{ excludeSelectors: ["img"] }}>
+        <ProductDetail product={product} />
+      </Skeleton>
 
       <div className="border-y-2 border-ink bg-sand py-4">
         <Marquee

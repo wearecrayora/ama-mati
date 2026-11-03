@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
 import Accordion from "@/components/ui/Accordion";
 
-export const metadata: Metadata = { title: "FAQ" };
+export const metadata: Metadata = pageMeta({
+  title: "FAQ",
+  description: "Delivery times, usuna rice, shelf life, bulk orders and returns at Aamahata.",
+  path: "/faq",
+});
 
 const GROUPS = [
   {

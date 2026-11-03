@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import Ingredient from "@/components/art/Ingredient";
 import Timeline from "@/components/about/Timeline";
 
-export const metadata: Metadata = { title: "Our story" };
+export const metadata: Metadata = pageMeta({
+  title: "Our story",
+  description: "Aama hata means our market. How Mati Odisha went from Ratha Yatra stalls to a Bhubaneswar outlet to Aamahata online.",
+  path: "/about",
+});
 
 const VALUES = [
   { t: "Odisha first", d: "Every product on the hata is made in Odisha, by Odia makers, from Odia recipes. That's the whole rule.", bg: "bg-chilli text-cream", k: "chilli" as const },

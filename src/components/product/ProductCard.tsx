@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { gsap, isFinePointer } from "@/lib/gsap";
 import { CHILLI, INK, SIENNA, inr, photosOf, type Product } from "@/lib/products";
 import { useCart, useUI } from "@/lib/store";
 import Ingredient from "@/components/art/Ingredient";
 import ProductMedia from "./ProductMedia";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { HeartIcon, PlusIcon } from "@/components/ui/Icons";
 
 export const darkStage = (c: string) => c === INK || c === SIENNA || c === CHILLI;
@@ -26,6 +27,7 @@ export default function ProductCard({ product, priority = false, className = "" 
   const showToast = useUI((s) => s.showToast);
   const size = product.sizes[0];
   const hasAlt = photosOf(product).length > 1;
+  const [ready, setReady] = useState(false);
 
   const enter = (e: React.PointerEvent) => {
     if (!isFinePointer()) return;
@@ -56,8 +58,8 @@ export default function ProductCard({ product, priority = false, className = "" 
     gsap.fromTo(card.current!.querySelector("[data-frame]"), { y: 0 }, { y: -18, duration: 0.18, yoyo: true, repeat: 1, ease: "power2.out" });
   };
 
-  return (
-    <div ref={card} className={`group relative ${className}`} onPointerEnter={enter} onPointerLeave={leave}>
+  const body = (
+    <>
       <div className="relative">
         {/* ingredients tucked behind the frame, popping out on hover */}
         <div className="pointer-events-none absolute inset-0 grid place-items-center" aria-hidden>
@@ -75,7 +77,7 @@ export default function ProductCard({ product, priority = false, className = "" 
             style={{ background: product.stage }}
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-[20px] border-2 border-ink bg-ink">
-              <ProductMedia product={product} priority={priority} />
+              <ProductMedia product={product} priority={priority} onReady={() => setReady(true)} />
               {hasAlt && (
                 <div data-alt className="absolute inset-0" style={{ clipPath: "circle(0% at 50% 50%)" }}>
                   <ProductMedia product={product} index={1} />
@@ -121,6 +123,16 @@ export default function ProductCard({ product, priority = false, className = "" 
           </div>
         </div>
       </Link>
+    </>
+  );
+
+  // Shimmer until the photo arrives. The real card is the server-rendered
+  // fallback, so names and prices are in the HTML before hydration.
+  return (
+    <div ref={card} className={`group relative ${className}`} onPointerEnter={enter} onPointerLeave={leave}>
+      <Skeleton name="product-card" loading={!ready} fallback={body}>
+        {body}
+      </Skeleton>
     </div>
   );
 }

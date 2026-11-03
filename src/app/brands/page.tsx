@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import PageHero from "@/components/ui/PageHero";
 
-export const metadata: Metadata = { title: "Brands" };
+export const metadata: Metadata = pageMeta({
+  title: "Brands",
+  description: "Odia makers on the Aamahata market, starting with Mati Odisha.",
+  path: "/brands",
+});
 
 const SOON = ["Cold-pressed oils", "Ragi & millets", "Handloom & crafts"];
 
