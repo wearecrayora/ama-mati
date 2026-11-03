@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { CREAM, INK, SAND, festivals, getProduct } from "@/lib/products";
-import ProductArt from "@/components/art/ProductArt";
+import PackShot from "@/components/product/PackShot";
 import { ArrowIcon } from "@/components/ui/Icons";
 
 /* Accordion of festival panels — the open one swells, the rest stay as spines. */
@@ -85,7 +85,7 @@ export default function Festivals() {
                       </Link>
                     </div>
                     <div data-fest-art className="mx-auto w-40 md:w-60">
-                      <ProductArt product={box} className="w-full" />
+                      <PackShot product={box} className="w-full" sizes="240px" />
                     </div>
                   </div>
                 )}

@@ -71,12 +71,12 @@ export default function MatiSpotlight() {
             An upcoming Odia pioneer with a simple promise — take the grain that never leaves the state and send it out, From Odisha to the World. Rice, dali and badi, pura fresh, sourced from Odia farms and packed at our own outlet.
           </p>
           <p data-reveal className="odia mt-4 text-2xl text-sand">ସ୍ୱଦେଶୀ ଖାଆନ୍ତୁ, ସୁସ୍ଥ ରୁହନ୍ତୁ</p>
-          <dl className="mt-10 grid grid-cols-2 gap-6 border-t-2 border-cream/15 pt-8 sm:grid-cols-4">
+          <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-8 border-t-2 border-cream/15 pt-8">
             {STATS.map((s) => (
               <div key={s.label} data-reveal>
                 <dt className="sr-only">{s.label}</dt>
                 <dd>
-                  <span className="display text-5xl text-sand">
+                  <span className="display block whitespace-nowrap text-[2.75rem] leading-none text-sand md:text-5xl">
                     <span data-stat={s.n}>0</span>
                     {s.suffix}
                   </span>

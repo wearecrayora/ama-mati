@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useUI } from "@/lib/store";
 import { CONTACT, getProduct } from "@/lib/products";
-import ProductArt from "@/components/art/ProductArt";
+import PackShot from "@/components/product/PackShot";
 import { InstagramIcon, WhatsappIcon } from "@/components/ui/Icons";
 
 const LINKS = [
@@ -97,8 +97,8 @@ export default function MenuOverlay() {
 
         <div className="relative hidden items-center justify-center md:flex">
           <div data-preview className="relative aspect-square w-[78%] rounded-full border-2 border-ink bg-sand shadow-[10px_10px_0_var(--color-ink)]">
-            <div data-preview-art className="absolute inset-[12%]">
-              <ProductArt product={art} className="h-full w-full" />
+            <div data-preview-art className="absolute inset-[10%] flex justify-center">
+              <PackShot product={art} className="h-full" sizes="320px" />
             </div>
           </div>
           <div data-fade className="absolute bottom-0 left-0 right-0 flex items-end justify-between">

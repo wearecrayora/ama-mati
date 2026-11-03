@@ -14,8 +14,6 @@ export const CREAM = "#f5f5dc";
 export const PAPER = "#fbfbef";
 export const SAND = "#f4a460";
 export const SIENNA = "#a0522d";
-export const POUCH = "#1d1612"; // the real Mati Odisha pouch is matte black
-export const GOLD = "#d9a72b";
 
 export type CategorySlug = "rice" | "dali" | "badi" | "boxes";
 
@@ -63,15 +61,6 @@ export const categories: Category[] = [
   },
 ];
 
-export type ArtShape = "pouch" | "tub" | "box";
-export type Contents = "red-rice" | "white-rice" | "long-rice" | "horsegram" | "toor" | "badi";
-
-export type ProductArt = {
-  shape: ArtShape;
-  contents: Contents;
-  ribbon?: string; // box ribbon / accent colour
-};
-
 export type Size = { label: string; price: number; mrp: number };
 
 export type IngredientKind = "paddy" | "rice" | "dal" | "beans" | "badi" | "leaf" | "sparkle" | "seeds" | "chilli";
@@ -93,7 +82,6 @@ export type Product = {
   badge?: "Limited stock" | "New batch" | "In stock" | "Festival" | "Proposed";
   stage: string;
   images: string[];
-  art: ProductArt;
   ingredientsArt: IngredientKind[];
   instagram?: string;
   includes?: string[];
@@ -122,7 +110,6 @@ export const products: Product[] = [
     badge: "New batch",
     stage: SAND,
     images: img("niti-usuna", 4),
-    art: { shape: "pouch", contents: "red-rice" },
     ingredientsArt: ["paddy", "rice", "sparkle"],
     instagram: "https://www.instagram.com/p/De04JplGKal/",
   },
@@ -147,7 +134,6 @@ export const products: Product[] = [
     badge: "In stock",
     stage: CREAM,
     images: img("niti-usuna-white", 5),
-    art: { shape: "pouch", contents: "white-rice" },
     ingredientsArt: ["rice", "paddy", "leaf"],
     instagram: "https://www.instagram.com/p/Dbj0CiFmPE0/",
   },
@@ -172,7 +158,6 @@ export const products: Product[] = [
     badge: "Limited stock",
     stage: CHILLI,
     images: img("biryani-rice", 6),
-    art: { shape: "pouch", contents: "long-rice" },
     ingredientsArt: ["rice", "leaf", "sparkle"],
     instagram: "https://www.instagram.com/p/Db-yWnkGI2C/",
   },
@@ -197,7 +182,6 @@ export const products: Product[] = [
     badge: "Limited stock",
     stage: SIENNA,
     images: img("kolatha-dali", 5),
-    art: { shape: "pouch", contents: "horsegram" },
     ingredientsArt: ["beans", "leaf", "sparkle"],
     instagram: "https://www.instagram.com/p/DbvZoRyGLGD/",
   },
@@ -221,7 +205,6 @@ export const products: Product[] = [
     badge: "Limited stock",
     stage: SAND,
     images: img("harada-dal", 5),
-    art: { shape: "pouch", contents: "toor" },
     ingredientsArt: ["dal", "leaf", "seeds"],
     instagram: "https://www.instagram.com/p/Dbo9rxImC_A/",
   },
@@ -245,7 +228,6 @@ export const products: Product[] = [
     badge: "Limited stock",
     stage: CHILLI,
     images: img("biri-badi", 5),
-    art: { shape: "tub", contents: "badi" },
     ingredientsArt: ["badi", "seeds", "chilli"],
     instagram: "https://www.instagram.com/p/DcJLiP1mN_z/",
   },
@@ -270,7 +252,6 @@ export const products: Product[] = [
     stage: SIENNA,
     images: [],
     includes: ["niti-usuna-rice", "biri-badi", "kolatha-dali"],
-    art: { shape: "box", contents: "red-rice", ribbon: CHILLI },
     ingredientsArt: ["sparkle", "paddy", "badi"],
   },
   {
@@ -294,7 +275,6 @@ export const products: Product[] = [
     stage: SAND,
     images: [],
     includes: ["niti-usuna-white", "harada-dali", "biri-badi"],
-    art: { shape: "box", contents: "toor", ribbon: SIENNA },
     ingredientsArt: ["sparkle", "dal", "rice"],
   },
   {
@@ -318,7 +298,6 @@ export const products: Product[] = [
     stage: CHILLI,
     images: [],
     includes: ["biryani-rice", "harada-dali", "biri-badi"],
-    art: { shape: "box", contents: "long-rice", ribbon: SAND },
     ingredientsArt: ["sparkle", "rice", "badi"],
   },
 ];
@@ -334,6 +313,15 @@ export function photosOf(p: Product): string[] {
   return (p.includes ?? []).map((s) => getProduct(s)?.images[0]).filter((x): x is string => !!x);
 }
 export const coverOf = (p: Product) => photosOf(p)[0];
+
+/*
+  Cut-out studio packshots (transparent background) in public/products/packs,
+  named by slug. Boxes return the packs of what's inside.
+*/
+export function packsOf(p: Product): string[] {
+  if (p.category !== "boxes") return [`/products/packs/${p.slug}.webp`];
+  return (p.includes ?? []).map((s) => `/products/packs/${s}.webp`);
+}
 
 export function related(p: Product, n = 4) {
   const same = products.filter((x) => x.category === p.category && x.slug !== p.slug);

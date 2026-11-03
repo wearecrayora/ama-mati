@@ -1,6 +1,6 @@
+import Link from "next/link";
 import Hero from "@/components/home/Hero";
 import Manifesto from "@/components/home/Manifesto";
-import ProductRail from "@/components/home/ProductRail";
 import CategoryStack from "@/components/home/CategoryStack";
 import MatiSpotlight from "@/components/home/MatiSpotlight";
 import Festivals from "@/components/home/Festivals";
@@ -9,11 +9,11 @@ import InstaStrip from "@/components/home/InstaStrip";
 import Marquee from "@/components/ui/Marquee";
 import NewsletterForm from "@/components/ui/NewsletterForm";
 import CircleText from "@/components/ui/CircleText";
+import ShopGrid from "@/components/shop/ShopGrid";
+import { ArrowIcon } from "@/components/ui/Icons";
 import { products } from "@/lib/products";
 
 export default function Home() {
-  const railItems = products;
-
   return (
     <>
       <Hero />
@@ -31,7 +31,22 @@ export default function Home() {
       </div>
 
       <Manifesto />
-      <ProductRail items={railItems} title="Fresh off the shelf" kicker="Pura fresh · limited lots" />
+      <section className="pb-24 pt-20 md:pb-32 md:pt-28">
+        <div className="wrap">
+          <div className="mb-8 flex items-end justify-between gap-6 md:mb-10">
+            <div>
+              <p className="eyebrow mb-3 text-chilli">Pura fresh · limited lots</p>
+              <h2 data-split className="display text-[13vw] md:text-[7vw]">
+                Fresh off the shelf
+              </h2>
+            </div>
+            <Link href="/shop" className="btn btn-sand hidden shrink-0 md:inline-flex">
+              Shop all <ArrowIcon width={18} height={18} />
+            </Link>
+          </div>
+          <ShopGrid items={products} />
+        </div>
+      </section>
       <CategoryStack />
       <MatiSpotlight />
       <Festivals />

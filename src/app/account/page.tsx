@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { getProduct } from "@/lib/products";
-import ProductArt from "@/components/art/ProductArt";
+import PackShot from "@/components/product/PackShot";
 
 export default function AccountPage() {
   const root = useRef<HTMLDivElement>(null);
@@ -38,7 +38,7 @@ export default function AccountPage() {
           <div className="relative h-[45%]">
             {art.map((p, i) => (
               <div key={p.slug} data-pop className="absolute bottom-0 w-[32%]" style={{ left: `${8 + i * 28}%`, rotate: `${(i - 1) * 10}deg` }}>
-                <ProductArt product={p} className="w-full" />
+                <PackShot product={p} className="w-full" sizes="20vw" />
               </div>
             ))}
           </div>

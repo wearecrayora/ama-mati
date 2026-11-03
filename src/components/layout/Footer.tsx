@@ -115,7 +115,8 @@ export default function Footer() {
       </div>
 
       <div data-word className="wrap select-none overflow-hidden" aria-hidden>
-        <p className="flex justify-between font-extrabold lowercase leading-[0.78] tracking-[-0.04em] text-sand text-[22vw]">
+        {/* Sized to the content width (max 1440px wrap) so all eight letters always fit. */}
+        <p className="flex justify-between font-extrabold lowercase leading-[0.82] tracking-[-0.04em] text-sand text-[min(18.5vw,258px)]">
           {WORD.map((l, i) => (
             <span key={i} data-letter className="inline-block">
               {l}

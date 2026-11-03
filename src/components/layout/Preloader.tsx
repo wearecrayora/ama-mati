@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP, reduceMotion } from "@/lib/gsap";
 import { products } from "@/lib/products";
 import { useUI } from "@/lib/store";
-import ProductArt from "@/components/art/ProductArt";
+import PackShot from "@/components/product/PackShot";
 
 /*
   Stop-motion preloader: packs flick through one frame at a time while a big
@@ -74,9 +74,14 @@ export default function Preloader() {
         .from(q("[data-stage]"), { scale: 0.6, autoAlpha: 0, duration: 0.9, ease: "back.out(2)" }, 0.1)
         .to(state, { v: 72, duration: 1.6, ease: "power2.inOut", onUpdate: render }, 0.2);
 
+      // Words start parked below their 1em window (and invisible until GSAP owns them,
+      // so nothing stacks up before hydration).
+      gsap.set(words, { yPercent: 110, autoAlpha: 1 });
+      // In and out share one ease, so the outgoing word stays exactly one slot above
+      // the incoming one (a slot-reel roll) instead of the two crossing mid-window.
       words.forEach((w, i) => {
-        tl.fromTo(w, { yPercent: 100 }, { yPercent: 0, duration: 0.45, ease: "power3.out" }, 0.25 + i * 0.36);
-        if (i < words.length - 1) tl.to(w, { yPercent: -100, duration: 0.45, ease: "power3.in" }, 0.25 + i * 0.36 + 0.36);
+        tl.to(w, { yPercent: 0, duration: 0.42, ease: "power3.inOut" }, 0.25 + i * 0.36);
+        if (i < words.length - 1) tl.to(w, { yPercent: -110, duration: 0.42, ease: "power3.inOut" }, 0.25 + (i + 1) * 0.36);
       });
 
       tl.add(() => {
@@ -123,7 +128,7 @@ export default function Preloader() {
           <div data-stage className="relative h-[42vh] max-h-[380px] w-[34vh] max-w-[300px]">
             {FRAMES.map((p) => (
               <div key={p.slug} data-frame className="absolute inset-0">
-                <ProductArt product={p} className="h-full w-full" />
+                <PackShot product={p} className="mx-auto h-full" sizes="300px" priority />
               </div>
             ))}
           </div>
@@ -137,9 +142,9 @@ export default function Preloader() {
           </div>
           <div className="mb-3 overflow-hidden text-right md:mb-6">
             <p data-in className="eyebrow mb-1 opacity-70">Packing your</p>
-            <div className="relative h-[1.15em] w-[5em] overflow-hidden text-3xl md:text-5xl">
+            <div className="relative h-[1em] w-[5em] overflow-hidden text-3xl md:text-5xl">
               {WORDS.map((w) => (
-                <span key={w} data-word className="display absolute right-0 top-0 block" style={{ transform: "translateY(100%)" }}>
+                <span key={w} data-word className="display invisible absolute right-0 top-0 block leading-none">
                   {w}
                 </span>
               ))}

@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP, isFinePointer, reduceMotion } from "@/lib/gsap";
 import { getProduct, inr, type IngredientKind } from "@/lib/products";
 import { useUI } from "@/lib/store";
-import ProductArt from "@/components/art/ProductArt";
+import PackShot from "@/components/product/PackShot";
 import Ingredient from "@/components/art/Ingredient";
 import CircleText from "@/components/ui/CircleText";
 
@@ -112,21 +112,7 @@ export default function Hero() {
       </span>
 
       <div className="relative flex min-h-[calc(100svh-var(--header-h))] flex-col">
-        <div className="relative flex flex-1 items-center justify-center">
-          <h1 data-h-text className="display relative z-10 text-center text-[19vw] leading-[0.86] md:text-[12.5vw]" aria-label="Taste the soil of Odisha">
-            <span className="block overflow-hidden pb-[0.06em]" aria-hidden>
-              <span data-h-line className="block">Taste the</span>
-            </span>
-            <span className="block overflow-hidden pb-[0.06em]" aria-hidden>
-              <span data-h-line className="block text-sand">
-                s<span className="inline-block w-[0.62em]" />il
-              </span>
-            </span>
-            <span className="block overflow-hidden pb-[0.06em]" aria-hidden>
-              <span data-h-line className="block">of Odisha</span>
-            </span>
-          </h1>
-
+        <div className="relative flex flex-1 items-center">
           {/* the spread */}
           <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
             {SPREAD.map((s, i) => (
@@ -138,21 +124,40 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* the pack, sitting in the "o" of soil */}
-          <div className="absolute left-1/2 top-1/2 z-20 w-[34vw] max-w-[300px] -translate-x-1/2 -translate-y-1/2 md:w-[17vw]" style={{ perspective: 800 }}>
-            <button
-              data-jar
-              onClick={() => setFrame((f) => (f + 1) % FRAMES.length)}
-              className="block w-full"
-              aria-label="Show next product"
-              data-cursor="Next"
-            >
-              <div data-jar-inner>
-                <div data-jar-frame>
-                  <ProductArt product={p} className="w-full drop-shadow-[8px_10px_0_rgba(43,22,12,0.35)]" />
+          <div className="wrap relative z-10 flex flex-col items-center gap-4 py-6 md:flex-row md:items-center md:justify-between md:gap-10">
+            <h1 data-h-text className="display whitespace-nowrap text-center text-[16vw] leading-[0.86] md:text-left md:text-[min(8.4vw,132px)]" aria-label="Taste the soil of Odisha">
+              <span className="block overflow-hidden pb-[0.06em]" aria-hidden>
+                <span data-h-line className="block">Taste the</span>
+              </span>
+              <span className="block overflow-hidden pb-[0.06em]" aria-hidden>
+                <span data-h-line className="block text-sand">soil</span>
+              </span>
+              <span className="block overflow-hidden pb-[0.06em]" aria-hidden>
+                <span data-h-line className="block">of Odisha</span>
+              </span>
+            </h1>
+
+            {/* the real pack, beside the headline */}
+            <div className="relative w-[44vw] max-w-[340px] shrink-0 md:mr-[2vw] md:w-[22vw]" style={{ perspective: 800 }}>
+              <button
+                data-jar
+                onClick={() => setFrame((f) => (f + 1) % FRAMES.length)}
+                className="block w-full"
+                aria-label="Show next product"
+                data-cursor="Next"
+              >
+                <div data-jar-inner>
+                  {/* every pack stays mounted so the stop-motion cuts never wait on a download */}
+                  <div data-jar-frame className="relative">
+                    {FRAMES.map((f, i) => (
+                      <div key={f.slug} className={`${i === 0 ? "" : "absolute inset-0"} ${i === frame ? "visible" : "invisible"}`}>
+                        <PackShot product={f} className="w-full" sizes="(min-width: 768px) 24vw, 46vw" priority={i === 0} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
         </div>
 
