@@ -40,9 +40,14 @@ export default function Header() {
           if (useUI.getState().menuOpen) return;
           const hide = self.direction === 1 && self.scroll() > 240;
           gsap.to(root.current, { yPercent: hide ? -110 : 0, duration: 0.6, overwrite: "auto" });
+          // Sticky bars (shop filters) slide up into the space the header leaves.
+          document.documentElement.style.setProperty("--header-offset", hide ? "0px" : "var(--header-h)");
         },
       });
-      return () => st.kill();
+      return () => {
+        st.kill();
+        document.documentElement.style.removeProperty("--header-offset");
+      };
     },
     { dependencies: [loaded] },
   );

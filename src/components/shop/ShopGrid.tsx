@@ -78,7 +78,7 @@ export default function ShopGrid({
   return (
     <div>
       {showFilters && (
-        <div className="sticky top-[calc(var(--header-h)-2px)] z-30 -mx-[var(--gutter)] mb-10 border-y-2 border-ink bg-cream/95 px-[var(--gutter)] py-3 backdrop-blur-md">
+        <div className="sticky-bar z-30 mb-10 border-y-2 border-ink bg-cream/95 py-3 backdrop-blur-md">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="no-scrollbar -mx-[var(--gutter)] flex gap-2 overflow-x-auto px-[var(--gutter)] md:mx-0 md:px-0" role="tablist" aria-label="Filter by category">
               {(["all", ...categories.map((c) => c.slug)] as const).map((c) => {

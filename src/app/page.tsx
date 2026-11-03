@@ -18,16 +18,19 @@ export default function Home() {
     <>
       <Hero />
 
-      <div className="relative z-10 -my-1 -rotate-2 scale-105 border-y-2 border-ink bg-ink py-4 text-cream">
-        <Marquee
-          items={products.slice(0, 10).map((p) => (
-            <span key={p.slug} className="display text-3xl md:text-5xl">
-              {p.name} <span className="odia ml-2 text-xl text-sand md:text-3xl">{p.odia}</span>
-            </span>
-          ))}
-          separator={<span className="text-chilli">✦</span>}
-          itemClassName="text-3xl md:text-5xl"
-        />
+      {/* The tilted band is scaled past both edges; clip it here so the page never scrolls sideways. */}
+      <div className="relative z-10 overflow-x-clip">
+        <div className="relative -my-1 -rotate-2 scale-105 border-y-2 border-ink bg-ink py-4 text-cream">
+          <Marquee
+            items={products.slice(0, 10).map((p) => (
+              <span key={p.slug} className="display text-3xl md:text-5xl">
+                {p.name} <span className="odia ml-2 text-xl text-sand md:text-3xl">{p.odia}</span>
+              </span>
+            ))}
+            separator={<span className="text-chilli">✦</span>}
+            itemClassName="text-3xl md:text-5xl"
+          />
+        </div>
       </div>
 
       <Manifesto />

@@ -25,10 +25,13 @@
 
 :root {
   --header-h: 72px;
+  /* How much of the top the header currently covers — 0 while it is hidden on scroll. */
+  --header-offset: var(--header-h);
   --gutter: clamp(16px, 4vw, 56px);
 }
 
 html {
+  overflow-x: clip;
   background: var(--color-cream);
   color: var(--color-ink);
   -webkit-tap-highlight-color: transparent;
@@ -179,6 +182,18 @@ body::after {
   .link-draw:hover {
     background-size: 100% 2px;
   }
+}
+
+/*
+  Sticky bars that sit under the header: follow it as it hides/shows, and run
+  edge to edge while keeping their content aligned to the .wrap column.
+*/
+.sticky-bar {
+  position: sticky;
+  top: calc(var(--header-offset) - 2px);
+  transition: top 0.6s var(--ease-out-expo);
+  margin-inline: calc(50% - 50vw);
+  padding-inline: max(var(--gutter), calc(50vw - 720px + var(--gutter)));
 }
 
 /* Scalloped edge — echoes the mandala petals in the Mati Odisha seal. */
